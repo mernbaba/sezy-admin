@@ -34,9 +34,6 @@ interface Agent {
   image: string;
 }
 
-export const revalidate = 30;
-export const dynamicParams = true;
-
 const Page = () => {
   const [agent, setAgent] = useState<Agent>({
     firstName: "",

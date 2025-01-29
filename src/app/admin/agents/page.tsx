@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import AgentTable from "./agent-table";
-
+export const revalidate = 30;
+export const dynamicParams = true;
 const Page = async () => {
   const agent = await prisma.agent.findMany();
 
