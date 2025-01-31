@@ -84,23 +84,44 @@ model Fee {
 }
 
 model Transaction {
-  transactionId String            @id @default(uuid())
-  studentId     String
-  agentId       String?
-  currencyId    String
-  amount        Float
-  forexRate     Float
-  status        TransactionStatus @default(Incomplete)
-  RRN           String?
-  challan       String?
-  a2Form        String?
-  swiftCopy     String?
-  remarks       String?
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  Student       Student           @relation(fields: [studentId], references: [studentId])
-  Agent         Agent?            @relation(fields: [agentId], references: [agentId])
-  Currency      Currency          @relation(fields: [currencyId], references: [currencyId])
+  transactionId       String            @id @default(uuid())
+  studentId           String
+  agentId             String?
+  currencyId          String
+  amount              Float
+  forexRate           Float
+  status              TransactionStatus @default(Incomplete)
+  RRN                 String?
+  challan             String?
+  a2Form              String?
+  swiftCopy           String?
+  remitType           String?
+  program             String?
+  yearOfCompletion    String?
+  paymentType         String?
+  university          String?
+  universitystudentId String?
+  universityAddress   String?
+  universityCity      String?
+  universityCountry   String?
+  document1           String?
+  document2           String?
+  additionalDocument  String?
+  accountInfo         String?
+  bankName            String?
+  bankAccountNumber   String?
+  bankCode            String?
+  bankCodeType        String?
+  bankSwiftCode       String?
+  bankIBAN            String?
+  bankAddress         String?
+  bankCountry         String?
+  remarks             String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  Student             Student           @relation(fields: [studentId], references: [studentId])
+  Agent               Agent?            @relation(fields: [agentId], references: [agentId])
+  Currency            Currency          @relation(fields: [currencyId], references: [currencyId])
 }
 
 enum TransactionStatus {
