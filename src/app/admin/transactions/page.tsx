@@ -3,6 +3,7 @@ import TransactionPage from "./TransactionPage";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export const dynamicParams = true;
+export const revalidate = 0;
 
 const Page = async () => {
   const transactions = await prisma.transaction.findMany({

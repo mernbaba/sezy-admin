@@ -122,12 +122,11 @@ const TransactionPage = ({
             <TableRow>
               <TableHead>Status</TableHead>
               <TableHead>Transaction ID</TableHead>
-              <TableHead>Beneficary Name</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Currency</TableHead>
               <TableHead>Remitter Name</TableHead>
-              <TableHead>Payer Type</TableHead>
-              <TableHead>Remarks</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Updated At</TableHead>
             </TableRow>
@@ -145,6 +144,10 @@ const TransactionPage = ({
                     {transaction?.transactionId}
                   </Link>
                 </TableCell>
+                <TableCell className="text-right">
+                  {transaction?.amount}
+                </TableCell>
+                <TableCell>{transaction?.Currency?.code}</TableCell>
                 <TableCell>
                   <Button variant={"secondary"} asChild>
                     <Link
@@ -155,16 +158,8 @@ const TransactionPage = ({
                     </Link>
                   </Button>
                 </TableCell>
-                <TableCell className="text-right">
-                  {transaction?.amount}
-                </TableCell>
-                <TableCell>{transaction?.Currency?.code}</TableCell>
-                <TableCell>
-                  {transaction?.Student?.firstName}{" "}
-                  {transaction?.Student?.lastName}
-                </TableCell>
-                <TableCell>Self</TableCell>
-                <TableCell>{transaction?.remarks}</TableCell>
+                <TableCell>{transaction?.Student?.phone}</TableCell>
+                <TableCell>{transaction?.Student?.email}</TableCell>
                 <TableCell>
                   {new Date(transaction?.createdAt).toLocaleString("en-US")}
                 </TableCell>

@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 import {
@@ -8,6 +10,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -18,6 +21,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { deleteCookie } from "cookies-next/client";
 
 const data = {
   navMain: [
@@ -69,6 +74,13 @@ const data = {
 };
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
+  const router = useRouter();
+
+  const logout = async () => {
+    deleteCookie("sezy");
+    router.push("/auth");
+  };
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -120,6 +132,19 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         ))}
       </SidebarContent>
       <SidebarRail />
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              variant={"outline"}
+              className="bg-red-600 text-white font-medium"
+              onClick={logout}
+            >
+              Logout
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };
