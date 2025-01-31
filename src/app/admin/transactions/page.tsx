@@ -1,16 +1,35 @@
+import prisma from "@/lib/prisma";
+import TransactionPage from "./TransactionPage";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
-const Page = () => {
+export const dynamicParams = true;
+
+const Page = async () => {
+  const transactions = await prisma.transaction.findMany({
+    include: {
+      Currency: true,
+      Student: true,
+    },
+    orderBy: [
+      {
+        status: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+  });
+
+  const currencies = await prisma.currency.findMany();
+
   return (
-    <div>
+    <div className="space-y-4 bg-white">
       <div className="sticky top-0 z-10 flex gap-4 items-center bg-white p-3">
         <SidebarTrigger className="aspect-square p-2 hover:bg-stone-100" />
         <h1 className="text-xl">Transactions</h1>
       </div>
 
-      <div className="bg-white m-4 overflow-auto rounded-lg p-4">
-        Coming Soon
-      </div>
+      <TransactionPage transactions={transactions} currencies={currencies} />
     </div>
   );
 };

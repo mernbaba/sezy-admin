@@ -121,8 +121,7 @@ import { revalidatePath } from "next/cache";
 //     rate: "5.00",
 //   },
 // ];
-export const revalidate = 30;
-export const dynamicParams = true;
+
 const Page = async () => {
   const currencies = await prisma.currency.findMany({
     orderBy: {

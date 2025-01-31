@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import StudentTable from "./student-table";
-export const revalidate = 30;
+
 export const dynamicParams = true;
+
 const Page = async () => {
   const students = await prisma.student.findMany({
     include: {

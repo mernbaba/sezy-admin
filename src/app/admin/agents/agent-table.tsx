@@ -16,6 +16,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import type { Agent } from "@prisma/client";
+import getS3URL from "@/utils/getS3URL";
 
 // const agentData = [
 //   {
@@ -281,6 +282,7 @@ import type { Agent } from "@prisma/client";
 // ];
 
 const AgentTable = ({ agentData }: { agentData: Agent[] }) => {
+  const defAvatar = getS3URL({ fileName: "avatar.png" });
   const columns: ColumnDef<(typeof agentData)[number]>[] = [
     {
       accessorKey: "name",
@@ -291,7 +293,7 @@ const AgentTable = ({ agentData }: { agentData: Agent[] }) => {
         <div className="flex items-center gap-2">
           <div className="relative">
             <Image
-              src={row.original.image ?? ""}
+              src={row.original.image || defAvatar}
               alt={row.original.firstName}
               width={24}
               height={24}

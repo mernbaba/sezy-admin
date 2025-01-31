@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import getS3URL from "@/utils/getS3URL";
 
 const Page = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props?.params;
@@ -29,7 +30,7 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
         <div className="flex gap-8 bg-white p-4 rounded-lg shadow-md">
           <div>
             <Image
-              src={student?.image ?? ""}
+              src={student?.image || getS3URL({ fileName: "avatar.png" })}
               width={200}
               height={200}
               alt={student?.firstName ?? ""}
@@ -51,10 +52,41 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
               <div className="col-span-2">
                 {new Date(student?.dob ?? "")?.toLocaleDateString("en-GB")}
               </div>
-              <div>Postal Address:</div>
-              <div className="col-span-2">{student?.postalAddress}</div>
-              <div>Physical Address:</div>
-              <div className="col-span-2">{student?.physicalAddress}</div>
+              <div>Address:</div>
+              <div className="col-span-2">{student?.address}</div>
+              {student?.admissionDoc && (
+                <>
+                  <div>Admission Doc</div>
+                  <div className="col-span-2">
+                    <Link href={student?.admissionDoc} target="_blank">
+                      View
+                    </Link>
+                  </div>
+                </>
+              )}
+              {student?.passportBackSide && student?.passportFrontSide && (
+                <>
+                  <div>Passport</div>
+                  <div className="col-span-2 space-x-4">
+                    <Link href={student?.passportFrontSide} target="_blank">
+                      Front
+                    </Link>
+                    <Link href={student?.passportBackSide} target="_blank">
+                      Back
+                    </Link>
+                  </div>
+                </>
+              )}
+              {student?.loanDoc && (
+                <>
+                  <div>Loan Doc</div>
+                  <div className="col-span-2">
+                    <Link href={student?.loanDoc} target="_blank">
+                      View
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

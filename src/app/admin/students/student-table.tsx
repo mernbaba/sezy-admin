@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import type { Student } from "@prisma/client";
 import { Button } from "@/components/ui/button";
+import getS3URL from "@/utils/getS3URL";
 
 type ExtendedStudent = Student & {
   Agent: {
@@ -26,6 +27,7 @@ type ExtendedStudent = Student & {
 };
 
 const StudentTable = ({ studentData }: { studentData: ExtendedStudent[] }) => {
+  const defAvatar = getS3URL({ fileName: "avatar.png" });
   const columns: ColumnDef<(typeof studentData)[number]>[] = [
     {
       accessorKey: "name",
@@ -36,7 +38,7 @@ const StudentTable = ({ studentData }: { studentData: ExtendedStudent[] }) => {
         <div className="flex items-center gap-2">
           <div className="relative">
             <Image
-              src={row.original.image ?? ""}
+              src={row.original.image || defAvatar}
               alt={row.original.firstName}
               width={24}
               height={24}

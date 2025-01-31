@@ -3,6 +3,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import getS3URL from "@/utils/getS3URL";
 
 const Page = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props?.params;
@@ -10,27 +11,6 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
   const agent = await prisma.agent.findUnique({
     where: { agentId: id },
   });
-
-  // const agent = {
-  //   id: "1",
-  //   firstName: "John",
-  //   middleName: "Doe",
-  //   lastName: "Johnson",
-  //   status: true,
-  //   country: "USA",
-  //   image: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=1",
-  //   email: "alice.johnson@example.com",
-  //   phone: "+1-555-0101",
-  //   postalAddress: "1234 Main St, Springfield, IL 62701",
-  //   physicalAddress: "1234 Main St, Springfield, IL 62701",
-  //   businessName: "John Doe Inc",
-  //   businessDocument:
-  //     "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=2",
-  //   businessDocumentNumber: "M123456",
-  //   businessDocumentType: "Business Certificate",
-  //   nationalId: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=2",
-  //   createdAt: "2021-10-01",
-  // };
 
   return (
     <div>
@@ -45,7 +25,7 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
         <div className="flex gap-8 bg-white p-4 rounded-lg shadow-md">
           <div>
             <Image
-              src={agent?.image ?? "/"}
+              src={agent?.image || getS3URL({ fileName: "avatar.png" })}
               width={200}
               height={200}
               alt={agent?.firstName ?? ""}
