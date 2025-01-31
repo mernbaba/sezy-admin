@@ -32,26 +32,33 @@ model Agent {
 }
 
 model Student {
-  studentId       String        @id @default(uuid())
-  firstName       String
-  middleName      String?
-  lastName        String
-  email           String        @unique
-  password        String
-  phone           String?
-  status          Boolean       @default(true)
-  image           String?
-  dob             DateTime?
-  gender          String?
-  country         String?
-  postalAddress   String?
-  physicalAddress String?
-  nationalId      String?
-  agentId         String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  Agent           Agent?        @relation(fields: [agentId], references: [agentId])
-  Transaction     Transaction[]
+  studentId         String        @id @default(uuid())
+  firstName         String
+  middleName        String?
+  lastName          String
+  email             String        @unique
+  password          String
+  phone             String?
+  status            Boolean       @default(true)
+  image             String?
+  passportNumber    String?
+  passportFrontSide String?
+  passportBackSide  String?
+  loanDoc           String?
+  admissionDoc      String?
+  dob               DateTime?
+  gender            String?
+  address           String?
+  city              String?
+  state             String?
+  country           String?
+  pincode           String?
+  agentId           String?
+  emailverified     Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  Agent             Agent?        @relation(fields: [agentId], references: [agentId])
+  Transaction       Transaction[]
 }
 
 model Currency {
@@ -67,25 +74,23 @@ model Currency {
 }
 
 model Fee {
-  feeId       String        @id @default(uuid())
-  name        String
-  info        String?
-  amount      Float
-  status      Boolean       @default(true)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Transaction Transaction[]
+  feeId     String   @id @default(uuid())
+  name      String
+  info      String?
+  amount    Float
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Transaction {
   transactionId String            @id @default(uuid())
   studentId     String
-  agentId       String
+  agentId       String?
   currencyId    String
-  feesId        String
   amount        Float
   forexRate     Float
-  status        TransactionStatus @default(Successful)
+  status        TransactionStatus @default(Incomplete)
   RRN           String?
   challan       String?
   a2Form        String?
@@ -94,20 +99,14 @@ model Transaction {
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
   Student       Student           @relation(fields: [studentId], references: [studentId])
-  Agent         Agent             @relation(fields: [agentId], references: [agentId])
+  Agent         Agent?            @relation(fields: [agentId], references: [agentId])
   Currency      Currency          @relation(fields: [currencyId], references: [currencyId])
-  Fee           Fee               @relation(fields: [feesId], references: [feeId])
 }
 
 enum TransactionStatus {
-  Successful
-  Funds_Received
-  Funds_Awaited
   Incomplete
+  Initiated
+  Successful
   Cancelled
-  Expired
-  Failed_by_Bank
-  Failed_by_Sendezy
-  Refund_Initiated
-  Refunded
+  Failed
 }
