@@ -39,19 +39,11 @@ const TransactionPage = ({
 }) => {
   const status = TransactionStatus;
 
-  //   const flow = [
-  //     "Self",
-  //     "Money Order",
-  //     "Relative On App",
-  //     "Educon Self",
-  //     "Educon Relative",
-  //   ];
-
   const defaultFilterState = {
     status: "",
     currency: "",
-    flow: "",
   };
+
   const [filters, setFilters] = useState(defaultFilterState);
 
   return (
@@ -105,13 +97,12 @@ const TransactionPage = ({
         </div>
 
         <div className="flex items-end gap-2">
-          <Button type="submit">Search</Button>
           <Button
             variant="secondary"
             type="reset"
             onClick={() => setFilters(defaultFilterState)}
           >
-            Clear
+            Clear Filters
           </Button>
         </div>
       </form>
@@ -124,7 +115,7 @@ const TransactionPage = ({
               <TableHead>Transaction ID</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Currency</TableHead>
-              <TableHead>Remitter Name</TableHead>
+              <TableHead>Beneficiary Name</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Created At</TableHead>
@@ -132,42 +123,51 @@ const TransactionPage = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.map((transaction) => (
-              <TableRow key={transaction?.transactionId}>
-                <TableCell className="font-medium">
-                  {transaction?.status}
-                </TableCell>
-                <TableCell>
-                  <Link
-                    href={`/admin/transactions/${transaction?.transactionId}`}
-                  >
-                    {transaction?.transactionId}
-                  </Link>
-                </TableCell>
-                <TableCell className="text-right">
-                  {transaction?.amount}
-                </TableCell>
-                <TableCell>{transaction?.Currency?.code}</TableCell>
-                <TableCell>
-                  <Button variant={"secondary"} asChild>
-                    <Link
-                      href={`/admin/students/${transaction?.Student?.studentId}`}
-                    >
-                      {transaction?.Student?.firstName}{" "}
-                      {transaction?.Student?.lastName}
-                    </Link>
-                  </Button>
-                </TableCell>
-                <TableCell>{transaction?.Student?.phone}</TableCell>
-                <TableCell>{transaction?.Student?.email}</TableCell>
-                <TableCell>
-                  {new Date(transaction?.createdAt).toLocaleString("en-US")}
-                </TableCell>
-                <TableCell>
-                  {new Date(transaction?.updatedAt).toLocaleString("en-US")}
-                </TableCell>
-              </TableRow>
-            ))}
+            {transactions.map(
+              (transaction) =>
+                (filters.status === "" ||
+                  transaction.status === filters.status) &&
+                (filters.currency === "" ||
+                  transaction.Currency.currencyId === filters.currency) && (
+                  <TableRow key={transaction?.transactionId}>
+                    <TableCell className="font-medium">
+                      {transaction?.status}
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/admin/transactions/${transaction?.transactionId}`}
+                        className="text-blue-600 font-medium font-mono"
+                      >
+                        {transaction?.transactionId}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {transaction?.amount}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {transaction?.Currency?.code}
+                    </TableCell>
+                    <TableCell>
+                      <Button variant={"secondary"} asChild>
+                        <Link
+                          href={`/admin/students/${transaction?.Student?.studentId}`}
+                        >
+                          {transaction?.Student?.firstName}{" "}
+                          {transaction?.Student?.lastName}
+                        </Link>
+                      </Button>
+                    </TableCell>
+                    <TableCell>{transaction?.Student?.phone}</TableCell>
+                    <TableCell>{transaction?.Student?.email}</TableCell>
+                    <TableCell>
+                      {new Date(transaction?.createdAt).toLocaleString("en-US")}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(transaction?.updatedAt).toLocaleString("en-US")}
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
           </TableBody>
         </Table>
       </div>
