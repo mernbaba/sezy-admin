@@ -19,12 +19,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Transaction,
   Currency,
   Student,
   TransactionStatus,
 } from "@prisma/client";
 import Link from "next/link";
+import { MdBlock, MdCheck } from "react-icons/md";
+import { updateTransaction } from "@/actions/transactions";
 
 type ExtendedTransaction = Transaction & { Currency: Currency } & {
   Student: Student;
@@ -113,11 +121,11 @@ const TransactionPage = ({
             <TableRow>
               <TableHead>Status</TableHead>
               <TableHead>Transaction ID</TableHead>
+              <TableHead>Actions</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Currency</TableHead>
               <TableHead>Beneficiary Name</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead>Contacts</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Updated At</TableHead>
             </TableRow>
@@ -141,6 +149,46 @@ const TransactionPage = ({
                         {transaction?.transactionId}
                       </Link>
                     </TableCell>
+                    <TableCell className="flex gap-2">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant={"secondary"}
+                              className="text-green-600"
+                              onClick={() =>
+                                updateTransaction(
+                                  transaction?.transactionId,
+                                  "Successful"
+                                )
+                              }
+                            >
+                              <MdCheck size={24} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Process Transaction</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant={"secondary"}
+                              className="text-red-600"
+                              onClick={() =>
+                                updateTransaction(
+                                  transaction?.transactionId,
+                                  "Failed"
+                                )
+                              }
+                            >
+                              <MdBlock size={24} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reject Transaction</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </TableCell>
                     <TableCell className="text-right font-mono">
                       {transaction?.amount}
                     </TableCell>
@@ -157,8 +205,11 @@ const TransactionPage = ({
                         </Link>
                       </Button>
                     </TableCell>
-                    <TableCell>{transaction?.Student?.phone}</TableCell>
-                    <TableCell>{transaction?.Student?.email}</TableCell>
+                    <TableCell>
+                      Phone: {transaction?.Student?.phone}
+                      <br />
+                      Email: {transaction?.Student?.email}
+                    </TableCell>
                     <TableCell>
                       {new Date(transaction?.createdAt).toLocaleString("en-US")}
                     </TableCell>
